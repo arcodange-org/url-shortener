@@ -1,0 +1,35 @@
+---
+# template source: https://github.com/bretfisher/docker-build-workflow/blob/main/templates/call-docker-build.yaml
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - main
+# cancel any previously-started, yet still active runs of this workflow on the same branch
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  pull-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Login to Gitea Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: gitea.arcodange.duckdns.org
+          username: ${{ github.actor }}
+          password: ${{ secrets.PACKAGES_TOKEN }}
+      
+      - name: Push public image to Gitea Container Registry
+        run: |-
+          CURRENT_VERSION=`wget https://raw.githubusercontent.com/SinTan1729/chhoto-url/main/actix/Cargo.toml -qO- | grep '^version = "' | sed 's/[^\.0-9]//g'`
+          TAGS="latest $CURRENT_VERSION"
+          for TAG in $TAGS; do
+            docker pull sintan1729/chhoto-url:$TAG --platform arm64
+            docker tag sintan1729/chhoto-url:$TAG gitea.arcodange.duckdns.org/${{ github.repository }}:$TAG
+            docker push gitea.arcodange.duckdns.org/${{ github.repository }}:$TAG
+          done
+        
