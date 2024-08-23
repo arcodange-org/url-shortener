@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "url-shortener.fullname" . }}-public
+  labels:
+    {{- include "url-shortener.labels" . | nindent 4 }}
+  annotations:
+    {{- with omit .Values.ingress.annotations "traefik.ingress.kubernetes.io/router.middlewares" -}}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+    traefik.ingress.kubernetes.io/router.pathmatcher: PathRegexp
+spec:
+  rules:
+    - host: {{ (.Values.ingress.hosts | first).host }}
+      http:
+        paths:
+          - path: /[^/]+
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: url-shortener
+                port:
+                  number: 4567

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "url-shortener.name" . }}-config
+  namespace: {{ .Release.Namespace }}
+data:
+  site_url: {{ include "url-shortener.fqdn" . }}
+  slug_style: "UID"
+  slug_length: "4"
+  db_url: "/data/urls.sqlite"
