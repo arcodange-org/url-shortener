@@ -13,7 +13,7 @@
 ## TLDR
 
 ```sh
-docker run --rm -p 4567:4567 -e site_url="http://0.0.0.0:4567" -e slug_style="UID" -e slug_length="4" gitea.arcodange.duckdns.org/arcodange-org/url-shortener:5.4.2 # -e db_url=/urls.sqlite
+docker run --rm -p 4567:4567 -e site_url="http://0.0.0.0:4567" -e slug_style="UID" -e slug_length="4" gitea.arcodange.lab/arcodange-org/url-shortener:5.4.2 # -e db_url=/urls.sqlite
 ```
 
 # What is it?

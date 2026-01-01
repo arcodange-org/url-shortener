@@ -23,7 +23,7 @@ jobs:
       - name: Login to Gitea Container Registry
         uses: docker/login-action@v3
         with:
-          registry: gitea.arcodange.duckdns.org
+          registry: gitea.arcodange.lab
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGES_TOKEN }}
       
@@ -33,7 +33,7 @@ jobs:
           TAGS="latest $CURRENT_VERSION"
           for TAG in $TAGS; do
             docker pull sintan1729/chhoto-url:$TAG --platform arm64
-            docker tag sintan1729/chhoto-url:$TAG gitea.arcodange.duckdns.org/${{ github.repository }}:$TAG
-            docker push gitea.arcodange.duckdns.org/${{ github.repository }}:$TAG
+            docker tag sintan1729/chhoto-url:$TAG gitea.arcodange.lab/${{ github.repository }}:$TAG
+            docker push gitea.arcodange.lab/${{ github.repository }}:$TAG
           done
         

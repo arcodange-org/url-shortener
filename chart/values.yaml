@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: gitea.arcodange.duckdns.org/arcodange-org/url-shortener
+  repository: gitea.arcodange.lab/arcodange-org/url-shortener
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -49,12 +49,14 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
-    traefik.ingress.kubernetes.io/router.tls.domains.0.main: arcodange.duckdns.org
-    traefik.ingress.kubernetes.io/router.tls.domains.0.sans: url.arcodange.duckdns.org
+    cert-manager.io/cluster-issuer: step-ca
     traefik.ingress.kubernetes.io/router.middlewares: localIp@file
+  tls:
+    - secretName: url-arcodange-lab-tls
+      hosts:
+        - url.arcodange.lab
   hosts:
-    - host: url.arcodange.duckdns.org
+    - host: url.arcodange.lab
       paths:
         - path: /
           pathType: Exact
@@ -64,7 +66,6 @@ ingress:
           pathType: Prefix
         - path: /assets/
           pathType: Prefix
-  tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
