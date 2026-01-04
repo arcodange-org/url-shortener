@@ -65,5 +65,5 @@ Create the name of the service account to use
 Define the public fqdn
 */}}
 {{- define "url-shortener.fqdn" -}}
-https:// {{- or (.Values.ingress.hosts | first).host ( get .Values.ingress.annotations "traefik.ingress.kubernetes.io/router.tls.domains.0.sans" ) }}
+https:// {{- or ((.Values.ingress.hosts | first).host | replace ".lab" ".fr" ) ( get .Values.ingress.annotations "traefik.ingress.kubernetes.io/router.tls.domains.0.sans" ) }}
 {{- end }}

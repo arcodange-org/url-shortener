@@ -49,7 +49,9 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    cert-manager.io/cluster-issuer: step-ca
+    cert-manager.io/issuer: step-issuer
+    cert-manager.io/issuer-kind: StepClusterIssuer
+    cert-manager.io/issuer-group: certmanager.step.sm
     traefik.ingress.kubernetes.io/router.middlewares: localIp@file
   tls:
     - secretName: url-arcodange-lab-tls

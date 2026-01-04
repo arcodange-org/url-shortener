@@ -5,13 +5,12 @@ metadata:
   labels:
     {{- include "url-shortener.labels" . | nindent 4 }}
   annotations:
-    {{- with omit .Values.ingress.annotations "traefik.ingress.kubernetes.io/router.middlewares" -}}
-    {{ toYaml . | nindent 4 }}
-    {{- end }}
+    traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.pathmatcher: PathRegexp
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-crowdsec@kubernetescrd
 spec:
   rules:
-    - host: {{ (.Values.ingress.hosts | first).host }}
+    - host: {{ (.Values.ingress.hosts | first).host | replace ".lab" ".fr" }}
       http:
         paths:
           - path: /[^/]+
